@@ -1,3 +1,6 @@
+import os
+from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from sqlalchemy import select
@@ -20,6 +23,16 @@ from app.routers import (
 
 Base.metadata.create_all(bind=engine)
 
+app = FastAPI(title="Zee Teacher System API", version="1.1.0")
+
+origins = os.getenv("CORS_ORIGINS", "http://localhost:5173,http://127.0.0.1:5173").split(",")
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=[o.strip() for o in origins if o.strip()],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 app = FastAPI(title="Zee Teacher System API", version="1.0.0")
 
 app.include_router(auth.router)
@@ -70,4 +83,5 @@ seed_demo_data()
 
 @app.get("/health")
 def health():
+    return {"status": "ok", "version": "1.1.0"}
     return {"status": "ok", "version": "1.0.0"}
