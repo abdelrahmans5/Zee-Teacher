@@ -1,6 +1,7 @@
 import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi import FastAPI
 from sqlalchemy.orm import Session
 from sqlalchemy import select
 
@@ -32,6 +33,7 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+app = FastAPI(title="Zee Teacher System API", version="1.0.0")
 
 app.include_router(auth.router)
 app.include_router(students.router)
@@ -82,3 +84,4 @@ seed_demo_data()
 @app.get("/health")
 def health():
     return {"status": "ok", "version": "1.1.0"}
+    return {"status": "ok", "version": "1.0.0"}
